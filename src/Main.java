@@ -3,10 +3,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Scanner;
 
-
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
 
         Scanner scanner = new Scanner(System.in);
         String[] products = {"Хлеб", "Яблоки", "Молоко"};//массив названия продуктов
@@ -16,14 +15,14 @@ public class Main {
 
         if (Files.exists(Path.of(String.valueOf(textFile)))) { //проверяем есть ли сохранённая в файле корзина
             System.out.println("Корзина восстановлена, т.к есть файл.");
+            products1 = Basket.loadFromTxtFile();
+            products1.printCart();
 
-            try {
-                products1.LoadFromTxtFile();
+        } else {
+            System.out.println("Сохранённой корзины нет!");
 
-            } catch (Exception e) {
-
-            }
         }
+
 
         System.out.println("Список возможных товаров для покупки:");
         for (int i = 0; i < products.length; i++) {
