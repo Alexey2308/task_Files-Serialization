@@ -4,10 +4,9 @@ public class Basket implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    protected static String[] prod;
-    protected static int[] price;
+    protected String[] prod;
+    protected int[] price;
     protected int[] cart;
-    protected int totalPrice;
 
     Basket(String[] products, int[] prices) {
         this.prod = products;
@@ -22,25 +21,20 @@ public class Basket implements Serializable {
             Basket backup = (Basket) objectStream.readObject();
             return backup;
         }
-
     }
-
 
     public void addToCart(int productNum, int amount) {
         cart[productNum - 1] += amount;
-        totalPrice += price[productNum] * amount;
     }
 
-
     public void printCart() {
+        int totalPrice = 0;
         System.out.println("В корзине:");
         for (int i = 0; i < prod.length; i++) {
             if (cart[i] != 0) {
-                int totalPrice = cart[i] * price[i];
-               this.totalPrice += totalPrice;
+                totalPrice += cart[i] * price[i];
                 System.out.println(prod[i] + " " + cart[i] + " шт." + price[i] + " руб./шт." +
-                        totalPrice + " руб. в сумме" + "\n");
-
+                        cart[i] * price[i] + " руб. в сумме" + "\n");
             }
 
         }
@@ -51,7 +45,6 @@ public class Basket implements Serializable {
 
         try (FileOutputStream outputStream = new FileOutputStream("basket.bin");
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)) {
-
             objectOutputStream.writeObject(saveBin);
         } catch (Exception ex) {
 
