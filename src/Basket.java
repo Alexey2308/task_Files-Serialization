@@ -14,7 +14,7 @@ public class Basket implements Serializable {
         this.cart = new int[products.length];
     }
 
-    public static Basket LoadFromTxtFile(String textFile) throws Exception {
+    public static Basket loadFromTxtFile(String textFile) throws Exception {
 
         try (FileInputStream inputStream = new FileInputStream(textFile);
              ObjectInputStream objectStream = new ObjectInputStream(inputStream)) {
