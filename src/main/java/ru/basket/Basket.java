@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 
 import java.io.*;
 
-
 public class Basket {
 
     protected String[] prod;
@@ -43,11 +42,6 @@ public class Basket {
 
     public void addToCart(int productNum, int amount) {
         cart[productNum - 1] += amount;
-//        try {
-//            saveTxt();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
     }
 
     public void printCart() {
@@ -64,9 +58,9 @@ public class Basket {
         System.out.println("Итого: " + totalPrice + " " + "рублей");
     }
 
-    public void saveTxt() throws IOException {
+    public void saveTxt(String filename) throws IOException {
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("basket.txt"))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename))) {
             for (String a : prod) {
                 bw.write(a + " ");
             }
@@ -87,9 +81,9 @@ public class Basket {
         Basket basket = new Basket(prod, price);
         try (Writer wr = new FileWriter(textfile)) {
             basket.totalPrice = this.totalPrice;
-            basket.cart=this.cart;
-            gson.toJson(basket,wr);
-            } catch (IOException e) {
+            basket.cart = this.cart;
+            gson.toJson(basket, wr);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
