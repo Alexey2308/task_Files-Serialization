@@ -1,16 +1,23 @@
+package ru.basket;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.*;
+
 
 public class Basket {
 
     protected String[] prod;
     protected int[] price;
     protected int[] cart;
-
+    protected int totalPrice;
 
     Basket(String[] products, int[] prices) {
         this.prod = products;
         this.price = prices;
         cart = new int[4];
+
     }
 
     public static Basket loadFromTxtFile() throws Exception {
@@ -36,11 +43,11 @@ public class Basket {
 
     public void addToCart(int productNum, int amount) {
         cart[productNum - 1] += amount;
-        try {
-            saveTxt();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            saveTxt();
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     public void printCart() {
@@ -49,6 +56,7 @@ public class Basket {
         for (int i = 0; i < prod.length; i++) {
             if (cart[i] != 0) {
                 totalPrice += cart[i] * price[i];
+                this.totalPrice = totalPrice;
                 System.out.println(prod[i] + " " + cart[i] + " шт." + price[i] + " руб./шт." +
                         price[i] * cart[i] + " руб. в сумме" + "\n");
             }
@@ -72,6 +80,33 @@ public class Basket {
                 bw.write(c + " ");
             }
         }
+    }
+
+    public void saveToJson(File textfile) {
+        Gson gson = new Gson();
+        Basket basket = new Basket(prod, price);
+        try (Writer wr = new FileWriter(textfile)) {
+            basket.totalPrice = this.totalPrice;
+            basket.cart=this.cart;
+            gson.toJson(basket,wr);
+            } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void LoadFromJson(File textfile) {
+        GsonBuilder gb = new GsonBuilder();
+        Gson gson = gb.create();
+        try (Reader reader = new FileReader(textfile)) {
+            Basket basketFromJson = gson.fromJson(reader, Basket.class);
+            this.totalPrice = basketFromJson.totalPrice;
+            basketFromJson.printCart();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
 
